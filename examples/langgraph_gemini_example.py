@@ -29,7 +29,12 @@ load_dotenv()
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from agentwatch.tracer import Tracer
 
-genai.configure(api_key=os.environ.get("GOOGLE_API_KEY", ""))
+api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY is not set")
+
+genai.configure(api_key=api_key)
 MODEL_NAME = "gemini-2.5-flash"
 
 
