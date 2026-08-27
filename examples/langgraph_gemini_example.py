@@ -20,6 +20,7 @@ import sys
 from typing import TypedDict, Annotated
 import operator
 
+from dotenv import load_dotenv
 from langgraph.graph import StateGraph, END
 import google.generativeai as genai
 
