@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: agentwatch
+Version: 0.1.0
+Summary: Lightweight tracing and eval framework for LLM agents (LangGraph, AutoGen, etc.)
+Requires-Python: >=3.10

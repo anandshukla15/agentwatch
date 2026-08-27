@@ -1,0 +1,2 @@
+[console_scripts]
+agentwatch = agentwatch.cli:main

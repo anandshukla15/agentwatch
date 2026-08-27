@@ -1,0 +1,13 @@
+README.md
+setup.py
+agentwatch/__init__.py
+agentwatch/cli.py
+agentwatch/evals.py
+agentwatch/replay.py
+agentwatch/tracer.py
+agentwatch.egg-info/PKG-INFO
+agentwatch.egg-info/SOURCES.txt
+agentwatch.egg-info/dependency_links.txt
+agentwatch.egg-info/entry_points.txt
+agentwatch.egg-info/top_level.txt
+tests/test_example_evals.py
