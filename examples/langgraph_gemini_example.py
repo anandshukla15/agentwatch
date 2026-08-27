@@ -24,6 +24,8 @@ from dotenv import load_dotenv
 from langgraph.graph import StateGraph, END
 import google.generativeai as genai
 
+load_dotenv()
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from agentwatch.tracer import Tracer
 
