@@ -35,7 +35,7 @@ if not api_key:
     raise ValueError("GOOGLE_API_KEY is not set")
 
 client = genai.Client(api_key=api_key)
-MODEL_NAME = "gemini-3.7-flash"
+MODEL_NAME = "gemini-3.6-flash"
 
 
 class AgentState(TypedDict):
