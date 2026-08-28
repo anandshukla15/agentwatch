@@ -22,7 +22,7 @@ import operator
 
 from dotenv import load_dotenv
 from langgraph.graph import StateGraph, END
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
@@ -34,8 +34,8 @@ api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
     raise ValueError("GOOGLE_API_KEY is not set")
 
-genai.configure(api_key=api_key)
-MODEL_NAME = "gemini-2.5-flash"
+client = genai.Client(api_key=api_key)
+MODEL_NAME = "gemini-3.7-flash"
 
 
 class AgentState(TypedDict):
@@ -58,7 +58,7 @@ def safe_calculator(expression: str) -> str:
 
 
 def make_graph(tracer: Tracer):
-    model = genai.GenerativeModel(MODEL_NAME)
+    ##model = genai.GenerativeModel(MODEL_NAME)
 
     def plan_node(state: AgentState) -> AgentState:
         with tracer.step("llm_call", node="planner") as step:
@@ -69,7 +69,10 @@ def make_graph(tracer: Tracer):
                 f"Question: {state['question']}"
             )
             step.log_input({"prompt": prompt})
-            response = model.generate_content(prompt)
+            response = client.models.generate_content( 
+                model=MODEL_NAME, 
+                contents=prompt 
+                )
             plan = response.text.strip()
             step.log_output({"plan": plan})
         return {"plan": plan}
@@ -89,7 +92,10 @@ def make_graph(tracer: Tracer):
                 "Write a one-sentence natural-language answer."
             )
             step.log_input({"prompt": prompt})
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=prompt
+            )
             answer = response.text.strip()
             step.log_output({"answer": answer})
         return {"answer": answer}
@@ -118,8 +124,11 @@ def run(question: str) -> str:
 
 
 if __name__ == "__main__":
-    q = " ".join(sys.argv[1:]) or "What's 17 * 24, then add 5?"
+    q = (
+         " ".join(sys.argv[1:]) or "What's 17 * 24, then add 5?" 
+        )
     if not os.environ.get("GOOGLE_API_KEY"):
-        print("Set GOOGLE_API_KEY first: export GOOGLE_API_KEY=your-key")
-        sys.exit(1)
+        print( "Set GOOGLE_API_KEY first.\n" "PowerShell:\n" '$env:GOOGLE_API_KEY="your-key"' ) 
+        sys.exit(1) 
+
     print(run(q))

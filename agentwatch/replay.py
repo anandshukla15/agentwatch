@@ -4,6 +4,11 @@ agentwatch.replay
 Pretty-prints a trace file step by step so you can see exactly what an agent
 did: which node ran, what went in, what came out, how long it took, and
 whether it errored.
+
+Supports both: 
+   agentwatch replay traces/calc-agent-123.jsonl 
+and glob patterns: 
+   agentwatch replay "traces/calc-agent-*.jsonl"
 """
 
 from __future__ import annotations
@@ -19,7 +24,7 @@ def _short(value, limit: int = 300) -> str:
     return text if len(text) <= limit else text[:limit] + "... [truncated]"
 
 
-def replay(path: str | Path, show_errors_only: bool = False) -> None:
+def _replay_file(path: str | Path, show_errors_only: bool = False) -> None:
     records = load_trace(path)
     print(f"\n=== Trace: {path} ({len(records)} events) ===\n")
 
@@ -48,6 +53,22 @@ def replay(path: str | Path, show_errors_only: bool = False) -> None:
         if has_error:
             print(f"   error:\n{r.get('error')}")
         print()
+
+
+def replay(path: str | Path, show_errors_only: bool = False) -> None:
+    path=str(path)
+    if any(char in path for char in "*?["):
+        matches = sorted(Path(".").glob(path))
+        if not matches:
+            raise FileNotFoundError( f"No trace files matched pattern: {path}" )
+        print(f"Found {len(matches)} trace file(s).\n")
+        for trace_file in matches:
+            _replay_file(trace_file, show_errors_only=show_errors_only)
+    else:
+        trace_file = Path(path)
+        if not trace_file.exists():
+            raise FileNotFoundError(f"Trace file not found: {trace_file}")
+        _replay_file(trace_file, show_errors_only=show_errors_only)    
 
 
 if __name__ == "__main__":
