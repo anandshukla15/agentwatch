@@ -10,6 +10,11 @@ the same way you catch code regressions.
 
 No servers, no accounts, no dashboards to host — just files and a CLI.
 
+<img width="221" height="567" alt="image" src="https://github.com/user-attachments/assets/b2f7db25-803a-4b48-b6a0-403efe799bdd" />   <img width="273" height="479" alt="image" src="https://github.com/user-attachments/assets/edbc672b-be35-4f37-bbe5-bb81915116b4" />
+
+
+ 
+ 
 ## Install
 
 ```bash
